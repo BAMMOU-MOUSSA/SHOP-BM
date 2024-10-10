@@ -1,0 +1,23 @@
+<app-nav-bar 
+  [panier]="displayPanier" 
+  (panierSelected)="showPanier($event)"
+  [productItms]="!displayHome" 
+  (homeSelected)="showHome($event)">
+</app-nav-bar>
+
+<div class="container my-4">
+  <div *ngIf="displayHome && !displayPanier">
+    <h2 class="text-center mb-4">Liste des Produits</h2>
+    <div class="row">
+      <div class="col-md-4" *ngFor="let produit of produits">
+         <app-produc-items 
+          [product]="produit" 
+          (selectedProduct)="onProductAdded($event)">
+        </app-produc-items>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Affichage du panier -->
+<app-panier *ngIf="displayPanier" [detailPanier]="detailsPanier" (continueShopping)="showHomeAfterShopping()"></app-panier>
