@@ -1,28 +1,75 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#"><strong>Shop-BAM</strong></a>
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="https://img.freepik.com/vecteurs-libre/modele-logo-boutique-instagram-degrade_23-2149709632.jpg?size=626&ext=jpg" alt="Shop-BAM Logo" class="me-2" style="width: 60px; height: 60px;">
+      <span class="fs-2" style="color: #333;">Shop-BAM</span>
+    </a>
+
+    <!-- Toggle Button for Mobile View -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <!-- Navbar Content -->
     <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Categories and Links Section -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#" (click)="afficherHome()">Home</a>
+          <a class="nav-link active" aria-current="page" href="#" (click)="afficherHome()">
+            <i class="fas fa-home me-2"></i>Home
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" (click)="afficherPanier()">Mon Panier</a>
+          <a class="nav-link d-flex align-items-center" href="#" (click)="afficherPanier()">
+            <i class="fas fa-shopping-cart me-2"></i>Mon Panier
+            <span class="badge bg-danger rounded-circle ms-2" style="position: relative; top: -8px;">{{ getTotalItems() }}</span>
+          </a>
+        </li>
+
+        <!-- Dropdown Categories -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-th-large me-2"></i>Categories
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#" (click)="filtrerParCategorie('Electronics')"><i class="fas fa-tv me-2"></i>Electronics</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filtrerParCategorie('Wearables')"><i class="fas fa-smartwatch me-2"></i>Wearables</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filtrerParCategorie('Audio')"><i class="fas fa-headphones-alt me-2"></i>Audio</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filtrerParCategorie('Photography')"><i class="fas fa-camera-retro me-2"></i>Photography</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" (click)="filtrerParCategorie('All')"><i class="fas fa-list me-2"></i>See All Categories</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-info-circle me-2"></i>About
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
+          <a class="nav-link" href="#">
+            <i class="fas fa-envelope me-2"></i>Contact
+          </a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+
+      <!-- Search Form Section (Centered) -->
+      <form class="d-flex mx-auto" style="width: 45%;">
+        <input class="form-control form-control-lg me-2 rounded-pill" type="search" placeholder="Search for products, brands, and more" aria-label="Search">
+        <button class="btn btn-success btn-lg rounded-pill" type="submit">
+          <i class="fas fa-search"></i> Search
+        </button>
       </form>
+
+      <!-- Right Side: Cart and Profile -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-user-circle fa-lg"></i> Sign In
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

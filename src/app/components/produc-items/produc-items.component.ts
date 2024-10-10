@@ -9,9 +9,10 @@ import { Produit } from '../../../models/Produit.model';
 export class ProducItemsComponent {
 
   @Input() product! : Produit;
-  @Output() selectedProduct = new EventEmitter<Produit>;
+  @Output() selectedProduct = new EventEmitter<Produit>();
 
   addToPanier() {
+    this.product.stock = this.product.stock - 1;
     this.selectedProduct.emit(this.product)
     }
 

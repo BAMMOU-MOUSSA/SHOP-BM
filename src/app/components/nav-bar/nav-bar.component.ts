@@ -13,6 +13,10 @@ export class NavBarComponent {
   @Input() productItms!: boolean;
   @Output() homeSelected = new EventEmitter<boolean>();
 
+  @Output() categorySelected = new EventEmitter<string>(); // Événement pour sélectionner une catégorie
+
+  @Input() totalItemsInCart: number = 0; // Input to receive total items in cart
+
   afficherPanier() {
     // Quand "Mon Panier" est cliqué, afficher le panier et cacher les produits
     this.panierSelected.emit(true);  // On affiche le panier
@@ -23,5 +27,13 @@ export class NavBarComponent {
     // Quand "Home" est cliqué, afficher les produits et cacher le panier
     this.panierSelected.emit(false);  // On cache le panier
     this.homeSelected.emit(true);     // On affiche les produits
+  }
+
+  filtrerParCategorie(categorie: string) {
+    this.categorySelected.emit(categorie); // Émet un événement avec la catégorie sélectionnée
+  }
+
+  getTotalItems() {
+    return this.totalItemsInCart; // Returns the total number of items in the cart
   }
 }

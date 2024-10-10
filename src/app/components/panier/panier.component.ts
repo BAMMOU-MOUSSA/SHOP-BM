@@ -10,7 +10,7 @@ export class PanierComponent {
 
 @Input() detailPanier! : LignePanier[];
 
-@Output() continueShopping = new EventEmitter<void>;  // Émission d'un événement pour continuer les achats
+@Output() continueShopping = new EventEmitter<void>();  // Émission d'un événement pour continuer les achats
 
 /*
 get totalPrice(): number {
