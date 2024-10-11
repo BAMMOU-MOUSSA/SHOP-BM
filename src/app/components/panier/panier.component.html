@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let i of detailPanier">
-          <td>{{i.produit.nom}}</td>
+          <td>{{i.produit.title}}</td>
           <td>{{i.produit.price | currency:'USD':true}}</td>
           <td>{{i.qte}}</td>
           <td>{{i.qte * i.produit.price | currency:'USD':true}}</td>

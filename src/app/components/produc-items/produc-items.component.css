@@ -3,3 +3,19 @@
     height: 200px;
     object-fit: contain; /* Permet à l'image d'être entièrement visible même si elle ne remplit pas le conteneur */
 }
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05); /* Légère augmentation de la taille au survol */
+}
+
+.btn-primary {
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Changement de couleur au survol */
+    border-color: #004085; /* Changement de couleur de la bordure au survol */
+}

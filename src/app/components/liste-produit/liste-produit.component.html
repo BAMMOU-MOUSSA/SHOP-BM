@@ -5,10 +5,12 @@
   (panierSelected)="showPanier($event)"
   [productItms]="!displayHome" 
   (homeSelected)="showHome($event)"
+  [totalItemsInCart]="totalItemsInCart"
   (categorySelected)="onCategorySelected($event)"
-  [totalItemsInCart]="totalItemsInCart"> <!-- Passer le nombre total d'articles au composant navbar -->
-  
+  [categories]="categories" 
+  (searchSelected)="onSearchSelected($event)"> <!-- Correction ici -->
 </app-nav-bar>
+
 
 <div class="container my-4">
   <div *ngIf="displayHome && !displayPanier">

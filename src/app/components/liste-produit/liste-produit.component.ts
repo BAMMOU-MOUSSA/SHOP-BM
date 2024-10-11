@@ -1,34 +1,84 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Produit } from '../../../models/Produit.model';
 import { LignePanier } from '../../../models/lignepanier.model';
+import { ProduitService } from '../../services/produit.service';
 
 @Component({
   selector: 'app-liste-produit',
   templateUrl: './liste-produit.component.html',
   styleUrls: ['./liste-produit.component.css']
 })
-export class ListeProduitComponent {
+export class ListeProduitComponent implements OnInit {
 
   detailsPanier: LignePanier[] = [];
   displayPanier: boolean = false;
   displayHome: boolean = true;
- 
+  produits: Produit[] = [];
+  produitsFiltres: Produit[] = []; // Liste des produits filtrés à afficher
+  categories: string[] = []; // Liste des catégories de produits
 
-  produits: Produit[] = [
-    new Produit(1, 'Laptop', 'https://thumb.ac-illust.com/a2/a2dee65bfe54b47c98ad9b8c9ee16133_w.jpeg', 'High-Performance Laptop', 1500, 'Electronics', 'A fast and reliable laptop.', 20),
-    new Produit(2, 'Smartphone', 'https://m.media-amazon.com/images/I/716OmvUFy1L._AC_SL1500_.jpg', 'Latest Smartphone', 1000, 'Electronics', 'A sleek smartphone with modern features.', 50),
-    new Produit(3, 'Headphones', 'https://i5.walmartimages.com/seo/onn-Wireless-Bluetooth-on-Ear-Headphones-Blue-New_08381ccb-2735-41ff-ac15-9a395d11c6f0.f18e7638c1241cc4cfa547d45de86bf6.jpeg', 'Wireless Headphones', 200, 'Audio', 'Noise-cancelling wireless headphones.', 100),
-    new Produit(4, 'Smartwatch', 'https://i5.walmartimages.com/asr/dda6bc1f-d282-4cf9-ad29-e827222bc4d5.8d402328f4d54e2b9a252879ec51fb79.jpeg', 'Smartwatch with GPS', 300, 'Wearables', 'A stylish smartwatch with fitness tracking features.', 30),
-    new Produit(5, 'Camera', 'https://pro.sony/s3/2017/09/05105006/Studio-and-Broadcast-Cameras.jpg', 'DSLR Camera', 1200, 'Photography', 'Professional DSLR camera for high-quality images.', 15)
-  ];
+  constructor(private produitService: ProduitService) { }
 
-  produitsFiltres: Produit[] = [...this.produits]; // Liste des produits filtrés à afficher
-  
-  
-  get totalItemsInCart(): number {
-    return this.detailsPanier.reduce((acc, item) => acc + item.qte, 0); // Compte le total d'articles dans le panier
+  ngOnInit(): void {
+    this.produitService.getAllCategories().subscribe(
+      (response: any) => {
+        this.categories = response; // Récupère toutes les catégories
+        this.getProductsByCategory('All'); // Charge tous les produits par défaut
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des catégories:', error);
+      }
+    );
   }
-  
+
+  // Récupérer les produits par catégorie
+  getProductsByCategory(category: string) {
+    if (category === 'All') {
+      this.produitService.getAllProducts().subscribe(
+        (response: any) => {
+          this.produits = response.products;
+          this.produitsFiltres = [...this.produits]; // Duplique tous les produits dans produitsFiltres
+        },
+        (error) => {
+          console.error('Erreur lors de la récupération des produits:', error);
+        }
+      );
+    } else {
+      this.produitService.getProductByCategory(category).subscribe(
+        (response: any) => {
+          this.produits = response.products;
+          this.produitsFiltres = [...this.produits]; // Duplique les produits de la catégorie sélectionnée
+        },
+        (error) => {
+          console.error(`Erreur lors de la récupération des produits pour la catégorie ${category}:`, error);
+        }
+      );
+    }
+  }
+
+  // Méthode pour filtrer les produits par catégorie depuis la barre de navigation
+  onCategorySelected(categorie: string) {
+    this.getProductsByCategory(categorie);
+  }
+
+  // Recherche de produit
+  onSearchSelected(term: string) {
+    if (term) {
+      this.produitService.searchProduct(term).subscribe(
+        (response: any) => {
+          this.produitsFiltres = response.products;
+        },
+        (error) => {
+          console.error('Erreur lors de la recherche de produit:', error);
+        }
+      );
+    }
+  }
+
+  // Méthodes du panier
+  get totalItemsInCart(): number {
+    return this.detailsPanier.reduce((acc, item) => acc + item.qte, 0);
+  }
 
   onProductAdded($event: Produit) {
     const existingProduct = this.detailsPanier.find(i => i.produit.id === $event.id);
@@ -40,32 +90,25 @@ export class ListeProduitComponent {
       newLignePanier.qte = 1;
       this.detailsPanier.push(newLignePanier);
     }
-    console.log(this.detailsPanier);
   }
 
+  // Affichage du panier
   showPanier($event: boolean) {
     this.displayPanier = $event;
-    this.displayHome = !this.displayPanier;  // Cacher la page Home quand le panier est affiché
+    this.displayHome = !this.displayPanier;
   }
 
+  // Affichage de la page des produits
   showHome($event: boolean) {
     this.displayHome = $event;
-    this.displayPanier = !this.displayHome;  // Cacher le panier quand la page Home est affichée
-    this.produitsFiltres = [...this.produits]; // Réinitialiser la liste pour afficher tous les produits
+    this.displayPanier = !this.displayHome;
+    this.produitsFiltres = [...this.produits]; // Réinitialise la liste des produits
   }
 
+  // Retour à la page d'accueil après avoir visualisé le panier
   showHomeAfterShopping() {
     this.displayPanier = false;
-    this.displayHome = true;  // Afficher la page Home quand on continue les achats
-    this.produitsFiltres = [...this.produits]; // Afficher tous les produits après avoir quitté le panier
-  }
-
-  // Filtrer les produits par catégorie
-  onCategorySelected(categorie: string) {
-    if (categorie === 'All') {
-      this.produitsFiltres = [...this.produits];
-    } else {
-      this.produitsFiltres = this.produits.filter(p => p.categorie === categorie);
-    }
+    this.displayHome = true;
+    this.produitsFiltres = [...this.produits]; // Réinitialise la liste des produits
   }
 }

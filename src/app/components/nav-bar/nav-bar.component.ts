@@ -17,14 +17,17 @@ export class NavBarComponent {
 
   @Input() totalItemsInCart: number = 0; // Input to receive total items in cart
 
+  @Input() category!: String;
+  @Input() categories: string[] = []; // Déclaration de la liste des catégories
+  @Output() searchSelected = new EventEmitter<string>();
+  
+
   afficherPanier() {
-    // Quand "Mon Panier" est cliqué, afficher le panier et cacher les produits
     this.panierSelected.emit(true);  // On affiche le panier
     this.homeSelected.emit(false);   // On cache les produits
   }
 
   afficherHome() {
-    // Quand "Home" est cliqué, afficher les produits et cacher le panier
     this.panierSelected.emit(false);  // On cache le panier
     this.homeSelected.emit(true);     // On affiche les produits
   }
@@ -35,5 +38,9 @@ export class NavBarComponent {
 
   getTotalItems() {
     return this.totalItemsInCart; // Returns the total number of items in the cart
+  }
+
+  searchProduit(term: string) {
+    this.searchSelected.emit(term); // Émet un événement avec le terme de recherche
   }
 }
