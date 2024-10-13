@@ -1,11 +1,14 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+// nav-bar.component.ts
+
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ProduitService } from '../../services/produit.service';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit{
 
   @Input() panier!: boolean;
   @Output() panierSelected = new EventEmitter<boolean>();
@@ -13,34 +16,47 @@ export class NavBarComponent {
   @Input() productItms!: boolean;
   @Output() homeSelected = new EventEmitter<boolean>();
 
-  @Output() categorySelected = new EventEmitter<string>(); // Événement pour sélectionner une catégorie
+  @Output() search = new EventEmitter<string>(); // Événement pour la recherche
+  @Output() categorySelected = new EventEmitter<string>();
+  @Input() totalItemsInCart: number = 0;
 
-  @Input() totalItemsInCart: number = 0; // Input to receive total items in cart
-
-  @Input() category!: String;
-  @Input() categories: string[] = []; // Déclaration de la liste des catégories
-  @Output() searchSelected = new EventEmitter<string>();
+  searchTerm: string = ''; // Initialiser le terme de recherche
+  categories: string[] = []; // Tableau pour stocker les catégories
   
-
-  afficherPanier() {
-    this.panierSelected.emit(true);  // On affiche le panier
-    this.homeSelected.emit(false);   // On cache les produits
+  constructor(private produitService: ProduitService) {}
+  ngOnInit(): void {
+      this.produitService.getAllCategories().subscribe(
+        (response: string[]) => {
+          this.categories = response;
+        },
+        (error) => {
+          console.error('Erreue lors de la recuperation des catégories',error);
+        }
+      )
   }
 
-  afficherHome() {
-    this.panierSelected.emit(false);  // On cache le panier
-    this.homeSelected.emit(true);     // On affiche les produits
+  searchProduct() {
+    if (this.searchTerm.trim()) {
+      this.search.emit(this.searchTerm); // Émettre l'événement avec le terme de recherche
+      this.searchTerm = ''; // Réinitialiser le champ de recherche
+    }
   }
 
   filtrerParCategorie(categorie: string) {
     this.categorySelected.emit(categorie); // Émet un événement avec la catégorie sélectionnée
   }
 
-  getTotalItems() {
-    return this.totalItemsInCart; // Returns the total number of items in the cart
+  afficherPanier() {
+    this.panierSelected.emit(true);
+    this.homeSelected.emit(false);
   }
 
-  searchProduit(term: string) {
-    this.searchSelected.emit(term); // Émet un événement avec le terme de recherche
+  afficherHome() {
+    this.panierSelected.emit(false);
+    this.homeSelected.emit(true);
+  }
+
+  getTotalItems() {
+    return this.totalItemsInCart;
   }
 }

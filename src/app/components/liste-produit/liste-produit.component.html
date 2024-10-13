@@ -1,4 +1,4 @@
-
+<!-- liste-produit.component.html -->
 
 <app-nav-bar 
   [panier]="displayPanier" 
@@ -6,23 +6,19 @@
   [productItms]="!displayHome" 
   (homeSelected)="showHome($event)"
   [totalItemsInCart]="totalItemsInCart"
-  (categorySelected)="onCategorySelected($event)"
-  [categories]="categories" 
-  (searchSelected)="onSearchSelected($event)"> <!-- Correction ici -->
+  (search)="searchProduct($event)"
+  (categorySelected)="onCategorySelected($event)">  
 </app-nav-bar>
-
 
 <div class="container my-4">
   <div *ngIf="displayHome && !displayPanier">
     <h2 class="text-center mb-4">Liste des Produits</h2>
     <div class="row">
       <div class="col-md-4" *ngFor="let produit of produitsFiltres">
-
-         <app-produc-items 
+        <app-produc-items 
           [product]="produit" 
           (selectedProduct)="onProductAdded($event)">
         </app-produc-items>
-
       </div>
     </div>
   </div>
@@ -30,7 +26,7 @@
 
 <!-- Affichage du panier -->
 <app-panier 
-*ngIf="displayPanier" 
-[detailPanier]="detailsPanier" 
-(continueShopping)="showHomeAfterShopping()">
+  *ngIf="displayPanier" 
+  [detailPanier]="detailsPanier" 
+  (continueShopping)="showHomeAfterShopping()">
 </app-panier>

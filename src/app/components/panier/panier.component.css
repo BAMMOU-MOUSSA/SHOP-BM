@@ -1,0 +1,51 @@
+.container {
+    background-color: #f8f9fa; /* Fond légèrement plus clair */
+    border-radius: 0.5rem;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .table {
+    border-radius: 0.5rem;
+    overflow: hidden; /* Pour les coins arrondis */
+  }
+  
+  .table thead th {
+    background-color: #007bff; /* Couleur de fond de l'en-tête */
+    color: white;
+    font-weight: bold;
+    text-align: center; /* Centrer le texte */
+  }
+  
+  .table tbody tr {
+    transition: background-color 0.3s ease;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #e9ecef; /* Couleur de survol douce */
+  }
+  
+  .table tbody td {
+    text-align: center; /* Centrer les cellules */
+  }
+  
+  .btn {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border-radius: 25px; /* Coins arrondis pour les boutons */
+  }
+  
+  .btn:hover {
+    background-color: #0056b3; /* Couleur plus sombre pour btn-primary */
+    transform: translateY(-3px); /* Effet de levée */
+  }
+  
+  .btn-success:hover {
+    background-color: #218838; /* Couleur plus sombre pour btn-success */
+    transform: translateY(-3px);
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333; /* Couleur plus sombre pour btn-danger */
+    transform: translateY(-3px);
+  }
+  

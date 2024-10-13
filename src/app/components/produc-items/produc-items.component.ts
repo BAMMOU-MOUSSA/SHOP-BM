@@ -12,15 +12,15 @@ export class ProducItemsComponent {
   @Output() selectedProduct = new EventEmitter<Produit>();
 
   addToPanier() {
-    this.product.stock = this.product.stock - 1;
+    this.product.stock--;
     this.selectedProduct.emit(this.product)
     }
 
-  getState(stock : number) : String {
+  getState(stock : number) : string {
     return stock > 0 ? "en stock" : " en rupture de stock";
   }
 
-  getColor(stock: number): String {
+  getColor(stock: number): string {
     return stock > 0 ? "green" : "red";
 }
 

@@ -1,3 +1,5 @@
+// liste-produit.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { Produit } from '../../../models/Produit.model';
 import { LignePanier } from '../../../models/lignepanier.model';
@@ -14,68 +16,24 @@ export class ListeProduitComponent implements OnInit {
   displayPanier: boolean = false;
   displayHome: boolean = true;
   produits: Produit[] = [];
-  produitsFiltres: Produit[] = []; // Liste des produits filtrés à afficher
-  categories: string[] = []; // Liste des catégories de produits
-
-  constructor(private produitService: ProduitService) { }
+  produitsFiltres: Produit[] = [];
+  errorMessage: string = '';
+  
+  constructor(private produitService: ProduitService) {}
 
   ngOnInit(): void {
-    this.produitService.getAllCategories().subscribe(
+    this.produitService.getAllProducts().subscribe(
       (response: any) => {
-        this.categories = response; // Récupère toutes les catégories
-        this.getProductsByCategory('All'); // Charge tous les produits par défaut
+        this.produits = response.products;
+        this.produitsFiltres = [...this.produits];
       },
       (error) => {
-        console.error('Erreur lors de la récupération des catégories:', error);
+        this.errorMessage = 'Erreur lors de la récupération des produits.';
+        console.error('Erreur lors de la récupération des produits', error);
       }
     );
   }
 
-  // Récupérer les produits par catégorie
-  getProductsByCategory(category: string) {
-    if (category === 'All') {
-      this.produitService.getAllProducts().subscribe(
-        (response: any) => {
-          this.produits = response.products;
-          this.produitsFiltres = [...this.produits]; // Duplique tous les produits dans produitsFiltres
-        },
-        (error) => {
-          console.error('Erreur lors de la récupération des produits:', error);
-        }
-      );
-    } else {
-      this.produitService.getProductByCategory(category).subscribe(
-        (response: any) => {
-          this.produits = response.products;
-          this.produitsFiltres = [...this.produits]; // Duplique les produits de la catégorie sélectionnée
-        },
-        (error) => {
-          console.error(`Erreur lors de la récupération des produits pour la catégorie ${category}:`, error);
-        }
-      );
-    }
-  }
-
-  // Méthode pour filtrer les produits par catégorie depuis la barre de navigation
-  onCategorySelected(categorie: string) {
-    this.getProductsByCategory(categorie);
-  }
-
-  // Recherche de produit
-  onSearchSelected(term: string) {
-    if (term) {
-      this.produitService.searchProduct(term).subscribe(
-        (response: any) => {
-          this.produitsFiltres = response.products;
-        },
-        (error) => {
-          console.error('Erreur lors de la recherche de produit:', error);
-        }
-      );
-    }
-  }
-
-  // Méthodes du panier
   get totalItemsInCart(): number {
     return this.detailsPanier.reduce((acc, item) => acc + item.qte, 0);
   }
@@ -90,25 +48,39 @@ export class ListeProduitComponent implements OnInit {
       newLignePanier.qte = 1;
       this.detailsPanier.push(newLignePanier);
     }
+    console.log(this.detailsPanier);
   }
 
-  // Affichage du panier
   showPanier($event: boolean) {
     this.displayPanier = $event;
     this.displayHome = !this.displayPanier;
   }
 
-  // Affichage de la page des produits
   showHome($event: boolean) {
     this.displayHome = $event;
     this.displayPanier = !this.displayHome;
-    this.produitsFiltres = [...this.produits]; // Réinitialise la liste des produits
+    this.produitsFiltres = [...this.produits];
   }
 
-  // Retour à la page d'accueil après avoir visualisé le panier
   showHomeAfterShopping() {
     this.displayPanier = false;
     this.displayHome = true;
-    this.produitsFiltres = [...this.produits]; // Réinitialise la liste des produits
+    this.produitsFiltres = [...this.produits];
+  }
+
+  searchProduct(p: string) {
+    this.produitService.searchProduct(p).subscribe(
+      (response: any) => {
+        this.produitsFiltres = response.products; // Met à jour les produits filtrés avec les résultats de la recherche
+      },
+      (error) => {
+        this.errorMessage = 'Erreur lors de la recherche des produits.';
+        console.error('Erreur lors de la recherche des produits', error);
+      }
+    );
+  }
+
+  onCategorySelected(category: string) {
+    this.produitsFiltres = this.produits.filter(produit => produit.category === category);
   }
 }

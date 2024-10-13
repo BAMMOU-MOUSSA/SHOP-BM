@@ -8,7 +8,8 @@ import { ProducItemsComponent } from './components/produc-items/produc-items.com
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ProduitService } from './services/produit.service';
 import { PanierService } from './services/panier.service';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,9 +22,10 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    FormsModule
+
   ],
-  providers: [ProduitService,PanierService],
+  providers: [ProduitService,PanierService,provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

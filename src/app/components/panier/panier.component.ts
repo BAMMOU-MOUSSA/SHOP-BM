@@ -7,6 +7,7 @@ import { LignePanier } from '../../../models/lignepanier.model';
   styleUrls: ['./panier.component.css']
 })
 export class PanierComponent {
+
   @Input() detailPanier!: LignePanier[];
 
   @Output() continueShopping = new EventEmitter<void>();

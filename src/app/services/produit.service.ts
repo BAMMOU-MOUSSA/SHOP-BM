@@ -1,26 +1,26 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Produit } from '../../models/Produit.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProduitService {
-  constructor(private http: HttpClient) { }
+  private apiUrl = 'https://dummyjson.com/products';
+  private categoriesUrl = 'https://dummyjson.com/products/categories';
 
-  getAllProducts(): Observable<any> {
-    return this.http.get('https://dummyjson.com/products');
+  constructor(private http: HttpClient) {}
+
+  getAllProducts(): Observable<{ products: Produit[] }> {
+    return this.http.get<{ products: Produit[] }>(this.apiUrl);
   }
 
   getAllCategories(): Observable<any> {
     return this.http.get('https://dummyjson.com/products/categories');
   }
 
-  getProductByCategory(category: string): Observable<any> {
-    return this.http.get(`https://dummyjson.com/products/category/${category}`);
-  }
-
-  searchProduct(produit: string): Observable<any> {
-    return this.http.get(`https://dummyjson.com/products/search?q=${produit}`);
+  searchProduct(term: string): Observable<{ products: Produit[] }> {
+    return this.http.get<{ products: Produit[] }>(`https://dummyjson.com/products/search?q=${term}`);
   }
 }
