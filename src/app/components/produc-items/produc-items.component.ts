@@ -12,7 +12,7 @@ export class ProducItemsComponent {
   @Output() selectedProduct = new EventEmitter<Produit>();
 
   addToPanier() {
-    this.product.stock = this.product.stock - 1;
+    this.product.stock--;
     this.selectedProduct.emit(this.product)
     }
 

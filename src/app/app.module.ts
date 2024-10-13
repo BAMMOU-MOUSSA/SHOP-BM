@@ -6,6 +6,10 @@ import { ListeProduitComponent } from './components/liste-produit/liste-produit.
 import { PanierComponent } from './components/panier/panier.component';
 import { ProducItemsComponent } from './components/produc-items/produc-items.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { ProduitService } from './services/produit.service';
+import { PanierService } from './services/panier.service';
+import { provideHttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,9 +21,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [ProduitService,PanierService,provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
